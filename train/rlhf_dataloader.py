@@ -31,20 +31,7 @@ class StoryRLHF(Dataset):
     def get_dataset(self):
         chosen = self.df['chosen'].tolist()
         rejected = self.df['rejected'].tolist()
-        prompts = []
-        for idx in range(len(self.df)):
-            story_idea = self.df['prompt'][idx]
-            init_paragraph = self.df['initial_paragraph'][idx]
-            prompt = self.format_prompt(story_idea, init_paragraph)
-            prompts.append(prompt)
-    
-        dataset = []
-        for i in range(len(prompts)):
-            data = {
-                "prompt": prompts[i],
-                "chosen": chosen[i],
-                "rejected": rejected[i]
-            }
-            dataset.append(data)
+        prompts = [self.format_prompt(self.df['prompt'][idx], self.df['initial_paragraph'][idx]) for idx in range(len(self.df))]
+        dataset = [{"prompt": prompts[i], "chosen": chosen[i], "rejected": rejected[i]} for i in range(len(prompts))]
         return dataset
 
