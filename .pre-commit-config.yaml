@@ -10,7 +10,6 @@ repos:
       - id: name-tests-test
       - id: requirements-txt-fixer
       - id: mixed-line-ending
-        exclude: .*\.xml
       - id: pretty-format-json
         exclude: (.*\.ipynb)
       - id: check-json
@@ -18,7 +17,6 @@ repos:
     rev: 24.1.0
     hooks:
       - id: black
-        language_version: python3.11
   - repo: https://github.com/pycqa/flake8
     rev: 7.0.0
     hooks:
