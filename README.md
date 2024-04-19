@@ -19,6 +19,10 @@ Insert package installation commands here
 1. Write inference script to generate chat responses from trained model
 2. Write test script to evaluate model performance on test dataset (will likely use similar logic as inference script, but use greedy decoding)
 
+### Notes about running code
 
+Make sure to that the library `datasets` version >= 2.18.0. Versions like 2.14.4 will run into the issue seen [here](https://community.deeplearning.ai/t/load-dataset-huggingface-dataset-name-not-working/511792).
 
+### Warnings
 
+The first row of the train [dataset](https://huggingface.co/datasets/YuehHanChen/forecasting?row=0) includes the forecasting `question` **at the end** of the `resolution_criteria` so further data cleaning may be needed.
