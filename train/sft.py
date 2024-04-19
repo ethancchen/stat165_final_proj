@@ -13,23 +13,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import io
-import os
 import copy
+import io
 import json
-import math
 import logging
-import pandas as pd
+import math
+import os
 from dataclasses import dataclass, field
 from typing import Dict, Optional, Sequence
 
-import wandb
+import pandas as pd
 import torch
 import transformers
-from torch.utils.data import Dataset
-from transformers import Trainer
+import wandb
 from llama_attn_replace_sft import replace_llama_attn
 from peft import LoraConfig, get_peft_model
+from torch.utils.data import Dataset
+from transformers import Trainer
 
 IGNORE_INDEX = -100
 DEFAULT_PAD_TOKEN = "[PAD]"
@@ -48,7 +48,7 @@ PROMPT_DICT = {
         "Write a response that appropriately completes the request.\n\n"
         "### Instruction:\n{instruction}\n\n### Response:"
     ),
-    "prompt_no_input_llama2":(
+    "prompt_no_input_llama2": (
         "[INST] <<SYS>>\n"
         "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\n"
         "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n"
@@ -59,7 +59,7 @@ PROMPT_DICT = {
         "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\n"
         "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n"
         "<</SYS>> \n\n {instruction} \n{input} [/INST]"
-    )
+    ),
 }
 
 
@@ -67,10 +67,12 @@ PROMPT_DICT = {
 class ModelArguments:
     model_name_or_path: Optional[str] = field(default="meta-llama/Llama-2-7b-chat-hf")
 
+
 @dataclass
 class DataArguments:
     data_path: str = field(default="../data_prep/sft_data.csv", metadata={"help": "Path to the training data."})
     actions_path: str = field(default="../actions.json")
+
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
@@ -96,7 +98,8 @@ class TrainingArguments(transformers.TrainingArguments):
         default="embed,norm",
         metadata={"help": "Additional trainable parameters except LoRA weights, if low rank training."},
     )
-    report_to: str = 'wandb'
+    report_to: str = "wandb"
+
 
 def smart_tokenizer_and_embedding_resize(
     special_tokens_dict: Dict,
@@ -169,12 +172,14 @@ class SupervisedDataset(Dataset):
 
         self.df = pd.read_csv(data_path)
 
-        with open(actions_path, 'r') as f:
+        with open(actions_path, "r") as f:
             self.actions = json.load(f)
 
-        self.prompt_template = "Below is an instruction that describes a task. " + \
-                          "Write a response that appropriately completes the request.\n\n" + \
-                          "### Instruction:\n{instruction}\n\n### Response:"
+        self.prompt_template = (
+            "Below is an instruction that describes a task. "
+            + "Write a response that appropriately completes the request.\n\n"
+            + "### Instruction:\n{instruction}\n\n### Response:"
+        )
 
         logging.warning("Formatting inputs...")
         data = []
@@ -203,7 +208,6 @@ class SupervisedDataset(Dataset):
         return self.prompt_template.format(instruction=instruction)
 
 
-
 @dataclass
 class DataCollatorForSupervisedDataset(object):
     """Collate examples for supervised fine-tuning."""
@@ -225,7 +229,9 @@ class DataCollatorForSupervisedDataset(object):
 
 def make_supervised_data_module(tokenizer: transformers.PreTrainedTokenizer, data_args) -> Dict:
     """Make dataset and collator for supervised fine-tuning."""
-    train_dataset = SupervisedDataset(tokenizer=tokenizer, data_path=data_args.data_path, actions_path=data_args.actions_path)
+    train_dataset = SupervisedDataset(
+        tokenizer=tokenizer, data_path=data_args.data_path, actions_path=data_args.actions_path
+    )
     data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
     return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
 
@@ -236,14 +242,10 @@ def train():
 
     run = wandb.init(
         project=f"swag-sft-{model_args.model_name_or_path}-{os.getenv('TRAINING_ID')}",
-        config={
-            "learning_rate": training_args.learning_rate,
-            "steps": training_args.max_steps,
-            "entity": 'svgpt'
-        }
+        config={"learning_rate": training_args.learning_rate, "steps": training_args.max_steps, "entity": "svgpt"},
     )
 
-    if 'llama' in model_args.model_name_or_path:
+    if "llama" in model_args.model_name_or_path:
         replace_llama_attn(training_args.use_flash_attn, training_args.use_full_attn)
 
     # Set RoPE scaling factor
@@ -298,7 +300,7 @@ def train():
     data_module = make_supervised_data_module(tokenizer=tokenizer, data_args=data_args)
 
     if training_args.low_rank_training:
-        targets=["q_proj", "k_proj", "v_proj", "o_proj"]
+        targets = ["q_proj", "k_proj", "v_proj", "o_proj"]
         config = LoraConfig(
             r=8,
             lora_alpha=16,
@@ -309,13 +311,17 @@ def train():
         )
         model = get_peft_model(model, config)
         # enable trainable params
-        [p.requires_grad_() for n, p in model.named_parameters() if any([k in n for k in training_args.trainable_params.split(",")])]
+        [
+            p.requires_grad_()
+            for n, p in model.named_parameters()
+            if any([k in n for k in training_args.trainable_params.split(",")])
+        ]
 
-    model.config.use_cache = False         # required for gradient checkpointing
-    model.enable_input_require_grads()     # required for gradient checkpointing
+    model.config.use_cache = False  # required for gradient checkpointing
+    model.enable_input_require_grads()  # required for gradient checkpointing
     model.gradient_checkpointing_enable()  # enable gradient checkpointing
 
-    wandb.watch(model, log='all')
+    wandb.watch(model, log="all")
 
     trainer = Trainer(model=model, tokenizer=tokenizer, args=training_args, **data_module)
     trainer.train()
@@ -323,6 +329,7 @@ def train():
     trainer.save_model(output_dir=training_args.output_dir)
     wandb.save(os.path.join(training_args.output_dir, "**/*"), policy="live")
     wandb.finish()
+
 
 if __name__ == "__main__":
     train()

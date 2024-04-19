@@ -3,7 +3,12 @@ from typing import Optional
 
 import torch
 from peft import PeftConfig, PeftModel
-from transformers import AutoModelForCausalLM, AutoModelForSequenceClassification, AutoTokenizer, HfArgumentParser
+from transformers import (
+    AutoModelForCausalLM,
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    HfArgumentParser,
+)
 
 
 @dataclass
@@ -13,9 +18,14 @@ class ScriptArguments:
     merged model.
     """
 
-    adapter_model_name: Optional[str] = field(default="/shared/zeeshan/llama_reward/Llama-2-7b-hf_peft_gpt-4-llm_rm_0_2e-05/checkpoint-1500/", metadata={"help": "the adapter name"})
+    adapter_model_name: Optional[str] = field(
+        default="/shared/zeeshan/llama_reward/Llama-2-7b-hf_peft_gpt-4-llm_rm_0_2e-05/checkpoint-1500/",
+        metadata={"help": "the adapter name"},
+    )
     base_model_name: Optional[str] = field(default="meta-llama/Llama-2-7b-hf", metadata={"help": "the base model name"})
-    output_name: Optional[str] = field(default='/shared/zeeshan/swirl_reward_model/', metadata={"help": "the merged model name"})
+    output_name: Optional[str] = field(
+        default="/shared/zeeshan/swirl_reward_model/", metadata={"help": "the merged model name"}
+    )
 
 
 parser = HfArgumentParser(ScriptArguments)
