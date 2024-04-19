@@ -16,12 +16,12 @@ class ForecastingRLHF(Dataset):
     def __len__(self):
         return len(self.df)
 
-    def format_prompt(self, question, resolution_criteria):
+    def format_prompt(self, question: str, resolution_criteria: str) -> str:
         return self.instruction_template.format(
             instruction=self.prompt_template.format(question=question, resolution_criteria=resolution_criteria)
         )
 
-    def get_dataset(self):
+    def get_dataset(self) -> list[dict]:
         chosen = self.df["chosen"].tolist()
         rejected = self.df["rejected"].tolist()
         prompts = [
