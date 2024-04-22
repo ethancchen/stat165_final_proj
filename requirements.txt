@@ -12,12 +12,20 @@ aiohttp==3.9.5
     #   fsspec
 aiosignal==1.3.1
     # via aiohttp
+annotated-types==0.6.0
+    # via pydantic
+anyio==4.3.0
+    # via
+    #   httpx
+    #   openai
 appdirs==1.4.4
     # via wandb
 attrs==23.2.0
     # via aiohttp
 certifi==2024.2.2
     # via
+    #   httpcore
+    #   httpx
     #   requests
     #   sentry-sdk
 charset-normalizer==3.3.2
@@ -30,6 +38,8 @@ dill==0.3.7
     # via
     #   datasets
     #   multiprocess
+distro==1.9.0
+    # via openai
 docker-pycreds==0.4.0
     # via wandb
 filelock==3.13.4
@@ -51,6 +61,12 @@ gitdb==4.0.11
     # via gitpython
 gitpython==3.1.43
     # via wandb
+h11==0.14.0
+    # via httpcore
+httpcore==1.0.5
+    # via httpx
+httpx==0.27.0
+    # via openai
 huggingface-hub==0.22.2
     # via
     #   accelerate
@@ -60,10 +76,22 @@ huggingface-hub==0.22.2
     #   transformers
 idna==3.7
     # via
+    #   anyio
+    #   httpx
     #   requests
     #   yarl
 jinja2==3.1.3
     # via torch
+jsonpatch==1.33
+    # via langchain-core
+jsonpointer==2.4
+    # via jsonpatch
+langchain-core==0.1.45
+    # via langchain-openai
+langchain-openai==0.1.3
+    # via -r requirements.in
+langsmith==0.1.49
+    # via langchain-core
 markupsafe==2.1.5
     # via jinja2
 mpmath==1.3.0
@@ -84,11 +112,16 @@ numpy==1.26.4
     #   peft
     #   pyarrow
     #   transformers
-packaging==24.0
+openai==1.23.2
+    # via langchain-openai
+orjson==3.10.1
+    # via langsmith
+packaging==23.2
     # via
     #   accelerate
     #   datasets
     #   huggingface-hub
+    #   langchain-core
     #   peft
     #   transformers
 pandas==2.2.2
@@ -108,6 +141,13 @@ pyarrow==15.0.2
     # via datasets
 pyarrow-hotfix==0.6
     # via datasets
+pydantic==2.7.0
+    # via
+    #   langchain-core
+    #   langsmith
+    #   openai
+pydantic-core==2.18.1
+    # via pydantic
 python-dateutil==2.9.0.post0
     # via pandas
 pytz==2024.1
@@ -117,15 +157,20 @@ pyyaml==6.0.1
     #   accelerate
     #   datasets
     #   huggingface-hub
+    #   langchain-core
     #   peft
     #   transformers
     #   wandb
 regex==2024.4.16
-    # via transformers
+    # via
+    #   tiktoken
+    #   transformers
 requests==2.31.0
     # via
     #   datasets
     #   huggingface-hub
+    #   langsmith
+    #   tiktoken
     #   transformers
     #   wandb
 safetensors==0.4.3
@@ -143,8 +188,17 @@ six==1.16.0
     #   python-dateutil
 smmap==5.0.1
     # via gitdb
+sniffio==1.3.1
+    # via
+    #   anyio
+    #   httpx
+    #   openai
 sympy==1.12
     # via torch
+tenacity==8.2.3
+    # via langchain-core
+tiktoken==0.6.0
+    # via langchain-openai
 tokenizers==0.19.1
     # via transformers
 torch==2.2.2
@@ -156,6 +210,7 @@ tqdm==4.66.2
     # via
     #   datasets
     #   huggingface-hub
+    #   openai
     #   peft
     #   transformers
 transformers==4.40.0
@@ -165,6 +220,9 @@ transformers==4.40.0
 typing-extensions==4.11.0
     # via
     #   huggingface-hub
+    #   openai
+    #   pydantic
+    #   pydantic-core
     #   torch
 tzdata==2024.1
     # via pandas
