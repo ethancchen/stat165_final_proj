@@ -13,13 +13,16 @@ class ForecastingRLHF(Dataset):
         )
         self.prompt_template = """Here is a forecasting question: {question}\n\nHere are the resolution criteria of the question: {resolution_criteria}.\n\nBased on the forecasting question and resolution criteria, generate {quality_type} quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion."""  # noqa: E501
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.df)
 
-    def format_prompt(self, question: str, resolution_criteria: str) -> str:
-        return self.instruction_template.format(
-            instruction=self.prompt_template.format(question=question, resolution_criteria=resolution_criteria)
-        )
+    def format_prompt(self, question: str, resolution_criteria: str, is_high_quality: bool) -> str:
+        assert isinstance(is_high_quality, bool), "Please choose a boolean for the LLM prompt to generate high (if True) or low quality reasoning."  # noqa: E501
+        assert question is not None, "Please provide a non-empty string for the question."
+        assert resolution_criteria is not None, "Please provide a non-empty string for the resolution criteria."
+        return self.prompt_template.format(question = question,
+                                      resolution_criteria = resolution_criteria,
+                                      quality_type = "high" if is_high_quality else "low")
 
     def get_dataset(self) -> list[dict]:
         chosen = self.df["chosen"].tolist()
