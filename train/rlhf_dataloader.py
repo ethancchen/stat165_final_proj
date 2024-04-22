@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from langchain_openai import ChatOpenAI
+from openai import OpenAI
 from pandas import Index
 from torch.utils.data import Dataset
 
@@ -31,7 +31,7 @@ class ForecastingRLHF(Dataset):
             + "### Instruction:\n{instruction}\n\n### Response:"
         )
         self.prompt_template = """Here is a forecasting question: {question}\n\nHere are the resolution criteria of the question: {resolution_criteria}.\n\nBased on the forecasting question and resolution criteria, generate {quality_type} quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion."""  # noqa: E501
-        self.llm = ChatOpenAI(model="gpt-4-turbo", api_key=get_openai_api_key())
+        self.client = OpenAI(api_key=get_openai_api_key())
 
     def __len__(self) -> int:
         return len(self.df)
@@ -63,21 +63,13 @@ class ForecastingRLHF(Dataset):
             lambda row: self.format_prompt(row[QUESTION], row[RESOLUTION_CRITERIA], False), axis=1
         )
 
-    def get_dataset(self) -> list[dict]:
-        """TODO: Under construction. DO NOT use for now."""
-        chosen = self.df[CHOSEN_RESPONSES].tolist()
-        rejected = self.df[REJECTED_RESPONSES].tolist()
-        prompts = [
-            self.format_prompt(self.df["question"][idx], self.df["resolution_criteria"][idx])
-            for idx in range(len(self.df))
-        ]
-        dataset = [{"prompt": prompts[i], "chosen": chosen[i], "rejected": rejected[i]} for i in range(len(prompts))]
-        return dataset
-
     def prompt_gpt4_once(self, prompt: str) -> str:
         assert len(prompt) > 0
         # TODO: error handling?
-        return self.llm.invoke(prompt).content
+        response = self.client.chat.completions.create(
+            model="gpt-4-turbo-2024-04-09", messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content
 
     def get_all_gpt4_responses(self) -> None:
         """Call this method after `populate_df_chosen_rejected`."""
@@ -89,3 +81,14 @@ class ForecastingRLHF(Dataset):
         rejected_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[REJECTED_PROMPTS]]
         self.df[CHOSEN_RESPONSES] = chosen_responses
         self.df[REJECTED_RESPONSES] = rejected_responses
+
+    def get_dataset(self) -> list[dict]:
+        """TODO: Under construction. DO NOT use for now."""
+        chosen = self.df[CHOSEN_RESPONSES].tolist()
+        rejected = self.df[REJECTED_RESPONSES].tolist()
+        prompts = [
+            self.format_prompt(self.df["question"][idx], self.df["resolution_criteria"][idx])
+            for idx in range(len(self.df))
+        ]
+        dataset = [{"prompt": prompts[i], "chosen": chosen[i], "rejected": rejected[i]} for i in range(len(prompts))]
+        return dataset

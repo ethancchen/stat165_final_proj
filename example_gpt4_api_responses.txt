@@ -10,17 +10,14 @@ Will the LIGO experiment publicly announce a 5-sigma (or equivalent) discovery o
 Based on the forecasting question and resolution criteria, generate low quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion.
 
 First try response:
-1. Research the Advanced Laser Interferometer Gravitational-Wave Observatory (LIGO) to understand its capabilities and the significance of its upgrade.
-2. Check the public announcements and press releases made by LIGO since it reopened in mid-September.
-3. Look for any information about LIGO's plans for future announcements or findings, particularly anything related to a potential discovery of astrophysical gravitational waves.
-4. Consider the calculations of the expected detection rates that suggest there could be tens or even hundreds of detectable events per year.
-5. Take into account the assumption that General Relativity is correct and that this could impact the likelihood of LIGO making a significant discovery.
-6. Determine if LIGO has made a public announcement of a 5-sigma (or equivalent) discovery of astrophysical gravitational waves by the specified date of January 31, 2016.
+1. Set up a connection with somebody who works on the LIGO project or monitors its news. Daily check for any update regarding discovery publications or announcements.
 
-Second try response:
-1. Start by checking the latest updates from the Advanced Laser Interferometer Gravitational-Wave Observatory (LIGO) about their progress in the detection of astrophysical gravitational waves.
-2. Look into the past performance of the initial LIGO, considering its lesser sensitivity and frequency range, to see if there were any near detections of gravitational waves. This could provide a baseline for the potential success of the advanced LIGO.
-3. Study the calculations of expected detection rates based on reasonable assumptions about neutron star and other types of binaries. This could provide an estimate of the likelihood of a successful detection within the given timeframe.
-4. Consider the reliability of General Relativity, as the success of the detection heavily relies on this theory. If there are any new developments or findings that challenge this theory, it could affect the outcome.
-5. Review the specific criteria for a 5-sigma discovery, as this is the benchmark set for a successful detection. Ensure that this criteria is fully understood and that any announced detection meets this standard.
-6. Keep in mind the date of Jan 31, 2016, and whether there is enough time for a successful detection to be made and announced. This could affect the resolution as the discovery may take time to be processed and verified before it is publicly announced.
+2. Make a rough estimate based on past projects similar to LIGO. If those projects took years to find something, assume LIGO might take the same amount of time.
+
+3. Listen to rumor sites and unverified online forums where enthusiasts may post insights or guesses about scientific discoveries like those LIGO is aiming for.
+
+4. Watch for relevant large science conferences or meetings where the LIGO team might announce discoveries to see if they have a scheduled time before the end of January.
+
+5. Assume that because the original LIGO and its enhancements are quite complex, and understanding their data could be challenging, the analysis might delay announcements.
+
+6. Take a wild guess whether LIGO’s increased sensitivity guarantees a discovery within a few months of operating based on understanding that more sensitive means better but not necessarily faster results.
