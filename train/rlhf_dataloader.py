@@ -25,7 +25,6 @@ class ForecastingRLHF(Dataset):
     def __init__(self, data_path: Path):
         self.data_path = data_path
         self.df = pd.read_csv(data_path)
-        assert "chosen" not in self._get_df_columns() and "rejected" not in self._get_df_columns()
         self.instruction_template = (
             "Below is an instruction that describes a task. "
             + "Write a response that appropriately completes the request.\n\n"
