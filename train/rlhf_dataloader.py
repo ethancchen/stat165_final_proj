@@ -11,7 +11,7 @@ class ForecastingRLHF(Dataset):
             + "Write a response that appropriately completes the request.\n\n"
             + "### Instruction:\n{instruction}\n\n### Response:"
         )
-        self.prompt_template = """Here is a forecasting question: {question}\n\nHere are the resolution criteria of the question: {resolution_criteria}.\n\nBased on the forecasting question and resolution criteria, generate {quality_type} quality step-by-step reasoning to create a resolution. Output only steps without an introduction or a conclusion."""  # noqa: E501
+        self.prompt_template = """Here is a forecasting question: {question}\n\nHere are the resolution criteria of the question: {resolution_criteria}.\n\nBased on the forecasting question and resolution criteria, generate {quality_type} quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion."""  # noqa: E501
 
     def __len__(self):
         return len(self.df)

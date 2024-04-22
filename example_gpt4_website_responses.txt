@@ -7,16 +7,18 @@ A full description of the experiment in gory detail can be found here.
 Calculations of the expected detection rates suggest tens and potentially hundreds of detectable events per year under reasonable assumptions about neutron star and other types of binaries (and of course assuming General Relativity is correct, etc.)
 Will the LIGO experiment publicly announce a 5-sigma (or equivalent) discovery of astrophysical gravitational waves by Jan 31, 2016?.
 
-Based on the forecasting question and resolution criteria, generate low quality step-by-step reasoning to create a resolution. Output only steps without an introduction or a conclusion.
+Based on the forecasting question and resolution criteria, generate low quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion.
 
 
 Response:
-1. Advanced LIGO's Features: Note that Advanced LIGO has 10x greater sensitivity and a wider range of frequencies, suggesting it could detect gravitational waves more effectively.
-2. Claims of Enhanced Detection Capability: Consider that Advanced LIGO is expected to achieve significant observational milestones quickly due to its enhanced capabilities.
-3. Detection Rate Projections: Reference the predictions that tens to hundreds of events could be detected each year, indicating a high likelihood of detection.
-4. Timeline for Announcements: Assume that since detections are expected to be frequent, an announcement by January 31, 2016, could be plausible.
-5. Technical and Operational Issues: Briefly acknowledge that technical or operational issues could delay an announcement but not delve into specifics or likelihoods.
-6. Simplistic Probability Assumption: Conclude that the combination of enhanced sensitivity and high expected detection rates makes an announcement likely by the specified date.
+1. Examine recent public statements or announcements from the LIGO collaboration or related scientific bodies to check if there have been any hints or preliminary reports of gravitational wave detections.
+2. Assess the operational status of the Advanced LIGO detectors since their reopening to understand if they have been functioning continuously and without significant technical issues, which might impact their ability to detect gravitational waves.
+3. Review scientific publications or preprint articles authored by members of the LIGO team for any data or analyses that could suggest a detection of gravitational waves within the specified timeframe.
+4. Consider the frequency and nature of events LIGO is designed to detect (like mergers of neutron stars or black holes) and analyze publicly available data on such celestial events that occurred since Advanced LIGO's upgrade to estimate the likelihood of a detection.
+5. Analyze statistical models or expert predictions on the frequency of gravitational wave events that LIGO could realistically observe, taking into account the improved sensitivity and operational capabilities post-upgrade.
+6. Verify if any scheduled scientific conferences, seminars, or press releases are aligned close to the deadline, as significant discoveries are often announced in coordinated events or major scientific gatherings.
+
+
 
 Prompt:
 Here is a forecasting question: Will advanced LIGO announce discovery of gravitational waves by Jan. 31 2016?
@@ -27,14 +29,13 @@ A full description of the experiment in gory detail can be found here.
 Calculations of the expected detection rates suggest tens and potentially hundreds of detectable events per year under reasonable assumptions about neutron star and other types of binaries (and of course assuming General Relativity is correct, etc.)
 Will the LIGO experiment publicly announce a 5-sigma (or equivalent) discovery of astrophysical gravitational waves by Jan 31, 2016?.
 
+Based on the forecasting question and resolution criteria, generate high quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion.
+
 
 Response:
-Based on the forecasting question and resolution criteria, generate high quality step-by-step reasoning to create a resolution. Output only steps without an introduction or a conclusion.
-1. Evaluate Technological Enhancements: Assess the specific technological improvements made to Advanced LIGO, focusing on the tenfold increase in sensitivity and the expansion in the frequency range. Understand how these enhancements could potentially boost the chances of detecting gravitational waves.
-2. Analyze Expected Detection Rates: Examine the calculations provided by the LIGO team, which predict the detection of tens to hundreds of events per year. Consider how these rates are calculated, including the assumptions about neutron star binaries and other celestial bodies.
-3. Review Historical Performance and Upgrades Impact: Look into the historical data of LIGO before the upgrade, noting any past detections or lack thereof. Compare this to the expected performance improvements post-upgrade, considering the enhanced sensitivity and frequency range.
-4. Understand the Significance of a 5-Sigma Discovery: Clarify what a 5-sigma level of confidence means in the context of this experiment—essentially, this would require the event to have a probability of being a false signal of less than one in 3.5 million.
-5. Timeline for Detection to Announcement: Analyze the typical timeline from detection of a potential gravitational wave to the public announcement. This involves data collection, analysis, verification, and possibly peer review, which could influence whether an announcement would be made by the specified date.
-6. Consider External and Operational Factors: Identify any external or operational factors that could affect the timeline or success rate, such as technical malfunctions, calibration issues, or funding disruptions.
-7. Probability and Forecasting Models: Use statistical methods or simulation models to estimate the likelihood of detecting and announcing a gravitational wave discovery by the end of January 2016, based on the improved capabilities and expected event rates.
-8. Consult Expert Opinions and Precedents: Consider the opinions of physicists and astronomers who specialize in gravitational waves to gauge consensus expectations about LIGO's capabilities and timelines. Also, review any similar historical precedents in physics where significant discoveries were made shortly after major technological upgrades.
+1. Examine the Capabilities of Advanced LIGO: Advanced LIGO, having reopened in mid-September with significantly improved sensitivity—ten times greater than its predecessor and a broader frequency range—has the technological capacity to detect gravitational waves. This enhanced sensitivity enables it to cover more cosmic events and potentially detect signs of gravitational waves earlier than before.
+2. Understand the Expected Detection Rates: According to calculations from LIGO scientists, the improved setup is expected to detect tens to hundreds of events per year, assuming models of neutron star binaries and general relativity are correct. This high rate of expected detections increases the likelihood that an event sufficient to produce detectable gravitational waves could occur within a short window after reopening.
+3. Consider the Time Frame of Operation: Advanced LIGO began operations in mid-September, which provides a little over four months of operational time until the January 31, 2016 deadline. Given its enhanced capabilities and the expected frequency of detectable events, this period should be adequate for initial detections under normal operational conditions.
+4. Evaluate the Significance Threshold for Announcement: The question specifies a detection must meet a 5-sigma level of confidence, equivalent to a probability of chance being less than 1 in 3.5 million. This high threshold ensures that only exceptionally clear signals are considered, reducing the likelihood of false positives but also setting a high bar for any announcement of discovery.
+5. Assess Operational and External Factors: Potential technical issues, calibration, data analysis, and verification processes could delay detection confirmation. Additionally, external factors such as funding, staffing, or environmental interference (like seismic activity) could impact LIGO’s ability to operate continuously at full capacity and thus influence the timing of any discoveries.
+6. Historical Precedent and Expert Confidence: Historically, groundbreaking scientific results often come after periods of testing and unexpected delays, suggesting caution in expecting a quick discovery. However, the confidence expressed by LIGO’s designers about its enhanced physics reach and the initial few hours of exceeding previous observations provide a counterbalancing optimism for a potential early discovery.
