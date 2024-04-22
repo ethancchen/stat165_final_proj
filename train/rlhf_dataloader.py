@@ -23,6 +23,10 @@ class ForecastingRLHF(Dataset):
         return self.prompt_template.format(question = question,
                                       resolution_criteria = resolution_criteria,
                                       quality_type = "high" if is_high_quality else "low")
+                                    
+    def populate_df_chosen_rejected(self) -> None:
+        self.df["chosen"] = self.df.apply(lambda row: self.format_prompt(row["question"], row["resolution_criteria"], True), axis=1)
+        self.df["rejected"] = self.df.apply(lambda row: self.format_prompt(row["question"], row["resolution_criteria"], False), axis=1)
 
     def get_dataset(self) -> list[dict]:
         chosen = self.df["chosen"].tolist()
