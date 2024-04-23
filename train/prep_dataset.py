@@ -15,7 +15,7 @@ QUESTION = "question"
 RESOLUTION_CRITERIA = "resolution_criteria"
 GENERAL_PROMPT = "general_prompt"
 CHOSEN_PROMPT = "chosen_prompt"
-REJECTED_PROMPT = "rejected_response"
+REJECTED_PROMPT = "rejected_prompt"
 CHOSEN_RESPONSE = "chosen_response"
 REJECTED_RESPONSE = "rejected_response"
 
@@ -89,8 +89,8 @@ class PrepDataset:
         """Call this method after `populate_df_chosen_rejected`."""
         assert CHOSEN_PROMPT in self._get_df_columns() or REJECTED_PROMPT in self._get_df_columns()
         assert not (
-            CHOSEN_PROMPT in self._get_df_columns() or REJECTED_PROMPT in self._get_df_columns()
-        ), f"Remove both columns {CHOSEN_PROMPT} and {REJECTED_PROMPT} from the df so they won't be overriden."
+            CHOSEN_RESPONSE in self._get_df_columns() or REJECTED_RESPONSE in self._get_df_columns()
+        ), f"Remove both columns {CHOSEN_RESPONSE} and {REJECTED_RESPONSE} from the df so they won't be overriden."
         chosen_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[CHOSEN_PROMPT]]
         rejected_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[REJECTED_PROMPT]]
         self.df[CHOSEN_RESPONSE] = chosen_responses
