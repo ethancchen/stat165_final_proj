@@ -96,6 +96,7 @@ class ForecastingRLHF(Dataset):
         rejected_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[REJECTED_PROMPT]]
         self.df[CHOSEN_RESPONSE] = chosen_responses
         self.df[REJECTED_RESPONSE] = rejected_responses
+        self.df.to_csv(self.data_path.with_name("prepared_gpt4_responses_" + self.data_path.name))
 
     def get_dataset(self) -> list[dict]:
         """Returns the dataset with each general prompt, chosen responses, and rejected responses."""
