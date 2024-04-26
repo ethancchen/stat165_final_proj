@@ -78,21 +78,40 @@ class PrepDataset:
         )
 
     def prompt_gpt4_once(self, prompt: str) -> str:
-        assert len(prompt) > 0
-        # TODO: error handling?
-        response = self.client.chat.completions.create(
-            model="gpt-4-turbo-2024-04-09", messages=[{"role": "user", "content": prompt}]
-        )
-        return response.choices[0].message.content
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4-turbo-2024-04-09", messages=[{"role": "user", "content": prompt}]
+            )
+            return response.choices[0].message.content
+        except Exception as e:
+            print(f"Error processing prompt: {prompt}\nError: {e}")
+            return "Error in response"  # Placeholder or handle appropriately
 
     def get_all_gpt4_responses(self) -> None:
-        """Call this method after `populate_df_chosen_rejected`."""
         assert CHOSEN_PROMPT in self._get_df_columns() or REJECTED_PROMPT in self._get_df_columns()
         assert not (
             CHOSEN_RESPONSE in self._get_df_columns() or REJECTED_RESPONSE in self._get_df_columns()
-        ), f"Remove both columns {CHOSEN_RESPONSE} and {REJECTED_RESPONSE} from the df so they won't be overriden."
-        chosen_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[CHOSEN_PROMPT]]
-        rejected_responses = [self.prompt_gpt4_once(prompt) for prompt in self.df[REJECTED_PROMPT]]
-        self.df[CHOSEN_RESPONSE] = chosen_responses
-        self.df[REJECTED_RESPONSE] = rejected_responses
-        self.df.to_csv(self.data_path.with_name("prepared_gpt4_responses_" + self.data_path.name))
+        ), f"Remove both columns {CHOSEN_RESPONSE} and {REJECTED_RESPONSE} from the df so they won't be overridden."
+
+        batch_size = 100
+        total_rows = len(self.df)
+        for start in range(0, total_rows, batch_size):
+            end = min(start + batch_size, total_rows)
+            print(f"Processing rows {start+1} to {end}...")
+
+            self.df.loc[start:end, CHOSEN_RESPONSE] = [
+                self.prompt_gpt4_once(prompt) for prompt in self.df.loc[start:end, CHOSEN_PROMPT]
+            ]
+            self.df.loc[start:end, REJECTED_RESPONSE] = [
+                self.prompt_gpt4_once(prompt) for prompt in self.df.loc[start:end, REJECTED_PROMPT]
+            ]
+
+            # Save progress
+            backup_path = self.data_path.with_name(f"prepared_gpt4_responses_checkpoint_{start}_{end}.csv")
+            self.df.to_csv(backup_path)
+            print(f"Checkpoint saved to {backup_path}")
+
+        # Final save
+        final_path = self.data_path.with_name("prepared_gpt4_responses_" + self.data_path.name)
+        self.df.to_csv(final_path)
+        print(f"Final data saved to {final_path}")
