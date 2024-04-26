@@ -19,6 +19,8 @@ REJECTED_PROMPT = "rejected_prompt"
 CHOSEN_RESPONSE = "chosen_response"
 REJECTED_RESPONSE = "rejected_response"
 
+CSV_DIR = Path(__file__).resolve().parents[1] / "data"
+
 
 class PrepDataset:
     def __init__(self, data_path: Path) -> None:
@@ -115,3 +117,13 @@ class PrepDataset:
         final_path = self.data_path.with_name("prepared_gpt4_responses_" + self.data_path.name)
         self.df.to_csv(final_path)
         print(f"Final data saved to {final_path}")
+
+
+if __name__ == "__main__":
+    assert CSV_DIR.exists()
+    csv_file = CSV_DIR / "train_hf_dataset.csv"
+    prepper = PrepDataset(csv_file)
+    prepper.df = prepper.df.head(5)  # TODO: remove later
+    prepper.populate_df_general_prompts()
+    prepper.populate_df_chosen_rejected()
+    prepper.get_all_gpt4_responses()
