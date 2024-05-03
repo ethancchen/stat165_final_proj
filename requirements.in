@@ -1,0 +1,10 @@
+# starter code
+peft
+torch
+transformers
+pandas
+wandb
+
+# on top of starter code
+datasets  # for the HuggingFace forecasting dataset from Prof's recent paper
+openai

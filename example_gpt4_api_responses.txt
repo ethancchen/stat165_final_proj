@@ -1,0 +1,23 @@
+Prompt:
+Here is a forecasting question: Will advanced LIGO announce discovery of gravitational waves by Jan. 31 2016?
+
+Here are the resolution criteria of the question: The Advanced Laser Interferometer Gravitational-Wave Observatory (LIGO) re-opened in mid September after a significant upgrade.
+Designed with 10x greater sensitivity and a wider range of covered frequencies than the original LIGO, advanced LIGO should, according to its designers, have an "enhanced physics reach that during its first several hours of operation will exceed the integrated observations of the 1 year LIGO Science Run."
+A full description of the experiment in gory detail can be found here.
+Calculations of the expected detection rates suggest tens and potentially hundreds of detectable events per year under reasonable assumptions about neutron star and other types of binaries (and of course assuming General Relativity is correct, etc.)
+Will the LIGO experiment publicly announce a 5-sigma (or equivalent) discovery of astrophysical gravitational waves by Jan 31, 2016?.
+
+Based on the forecasting question and resolution criteria, generate low quality step-by-step reasoning to create a resolution. Output exactly 6 steps without an introduction or a conclusion.
+
+First try response:
+1. Set up a connection with somebody who works on the LIGO project or monitors its news. Daily check for any update regarding discovery publications or announcements.
+
+2. Make a rough estimate based on past projects similar to LIGO. If those projects took years to find something, assume LIGO might take the same amount of time.
+
+3. Listen to rumor sites and unverified online forums where enthusiasts may post insights or guesses about scientific discoveries like those LIGO is aiming for.
+
+4. Watch for relevant large science conferences or meetings where the LIGO team might announce discoveries to see if they have a scheduled time before the end of January.
+
+5. Assume that because the original LIGO and its enhancements are quite complex, and understanding their data could be challenging, the analysis might delay announcements.
+
+6. Take a wild guess whether LIGO’s increased sensitivity guarantees a discovery within a few months of operating based on understanding that more sensitive means better but not necessarily faster results.

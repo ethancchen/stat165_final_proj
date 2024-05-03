@@ -3,7 +3,7 @@ export PYTHONUNBUFFERED=1
 
 # Do all the research.
 export WANDB_API_KEY="d8d9e125428dc4ae19cfe692ce098eee9387b5cb" # set this to your own api key
-export HUGGINGFACE_TOKEN="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" 
+export HUGGINGFACE_TOKEN="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"
 export TRAINING_ID="001"
 export WANDB_LOG_MODEL=true
 
