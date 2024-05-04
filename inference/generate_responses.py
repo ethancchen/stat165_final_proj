@@ -20,15 +20,6 @@ MAX_MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 1024
 MAX_INPUT_TOKEN_LENGTH = int(os.getenv("MAX_INPUT_TOKEN_LENGTH", "4096"))
 
-# Prepare the model and tokenizer if CUDA is available
-if torch.cuda.is_available():
-    model_id = "meta-llama/Llama-2-7b-chat-hf"
-    model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
-else:
-    logger.error("CUDA is not available. This script requires a GPU to run.")
-    exit(1)
-
 
 def generate(queries: List[str], max_new_tokens: int = 1024) -> List[str]:
     responses = []
@@ -45,11 +36,18 @@ def generate(queries: List[str], max_new_tokens: int = 1024) -> List[str]:
 
 
 if __name__ == "__main__":
+    if torch.cuda.is_available():
+        model_id = "meta-llama/Llama-2-7b-chat-hf"
+        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
+        tokenizer = AutoTokenizer.from_pretrained(model_id)
+    else:
+        logger.error("CUDA is not available. This script requires a GPU to run.")
+        exit(1)
     queries = [
         "What is the impact of AI on society?",
         "Tell me about the latest advancements in machine learning.",
         "How does quantum computing affect data security?",
     ]
-    responses = generate(queries)
-    for response in responses:
-        print(response)
+    # responses = generate(queries)
+    # for response in responses:
+    #     print(response)
