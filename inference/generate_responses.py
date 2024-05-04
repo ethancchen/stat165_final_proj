@@ -1,6 +1,7 @@
 import logging
 import os
 from typing import List
+from pathlib import Path
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, TextGenerationPipeline
@@ -19,6 +20,8 @@ logger = logging.getLogger(__name__)
 MAX_MAX_NEW_TOKENS = 2048
 DEFAULT_MAX_NEW_TOKENS = 1024
 MAX_INPUT_TOKEN_LENGTH = int(os.getenv("MAX_INPUT_TOKEN_LENGTH", "4096"))
+MODEL_ID = "meta-llama/Meta-Llama-3-8B"
+CUSTOM_CACHE_DIR = Path("/", "global", "scratch", "users", "ethancchen", ".cache", "huggingface", "models--meta-llama--Meta-Llama-3-8B")
 
 
 def generate(queries: List[str], max_new_tokens: int = 1024) -> List[str]:
@@ -37,9 +40,8 @@ def generate(queries: List[str], max_new_tokens: int = 1024) -> List[str]:
 
 if __name__ == "__main__":
     if torch.cuda.is_available():
-        model_id = "meta-llama/Llama-2-7b-chat-hf"
-        model = AutoModelForCausalLM.from_pretrained(model_id, torch_dtype=torch.float16, device_map="auto")
-        tokenizer = AutoTokenizer.from_pretrained(model_id)
+        model = AutoModelForCausalLM.from_pretrained(MODEL_ID, torch_dtype=torch.float16, device_map="auto", cache_dir = CUSTOM_CACHE_DIR)
+        tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, cache_dir = CUSTOM_CACHE_DIR)
     else:
         logger.error("CUDA is not available. This script requires a GPU to run.")
         exit(1)
@@ -48,6 +50,6 @@ if __name__ == "__main__":
         "Tell me about the latest advancements in machine learning.",
         "How does quantum computing affect data security?",
     ]
-    # responses = generate(queries)
-    # for response in responses:
-    #     print(response)
+    responses = generate(queries)
+    for response in responses:
+        print(response)
