@@ -99,7 +99,7 @@ class Inferencer:
 
     async def get_all_gpt35_responses(self) -> None:
         """Call this only once. DO NOT call this along with every single LlaMA model generation."""
-        assert LLAMA_RESPONSE not in self._get_df_columns()
+        assert GPT35_RESPONSE not in self._get_df_columns()
 
         # Create a list of tasks for asynchronous execution
         tasks = [self.prompt_gpt35_once(row[GENERAL_PROMPT]) for _, row in self.df.iterrows()]
