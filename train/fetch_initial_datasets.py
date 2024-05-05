@@ -4,7 +4,7 @@ import pandas as pd
 from datasets import load_dataset
 
 HF_DATA_PATH = "YuehHanChen/forecasting"
-DATA_SPLITS = ("train", "validation")
+DATA_SPLITS = ("train", "validation", "test")
 CSV_DIR = Path(__file__).resolve().parents[1] / "data"
 
 
