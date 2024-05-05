@@ -107,8 +107,10 @@ class Evaluator:
     async def get_all_gpt4_comparison_responses(self) -> None:
         """Prompt GPT-4 with COMPARISON_PROMPT to compare the two LLM responses for each query in the test set."""
         assert GPT4_COMPARISON_RESPONSE not in self.evaluation_df.columns
+        assert COMPARISON_PROMPT in self.evaluation_df.columns
 
-        tasks = [self.prompt_gpt35_once(row[GENERAL_PROMPT]) for _, row in self.df.iterrows()]
+        raise NotImplementedError("TODO: shuffle the two reasonings")
+        tasks = [self.prompt_gpt35_once(row[COMPARISON_PROMPT]) for _, row in self.df.iterrows()]
         gpt4_comparison_responses = await asyncio.gather(*tasks)
 
         self.evaluation_df[GPT4_COMPARISON_RESPONSE] = gpt4_comparison_responses
