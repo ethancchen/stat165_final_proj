@@ -1,4 +1,7 @@
-"""Inference for forecasting LLMs, use huggingface implementation:
+"""
+CURRENTLY UNUSED.
+
+# Inference for forecasting LLMs, use huggingface implementation:
 
 
 def huggingface_generate(
