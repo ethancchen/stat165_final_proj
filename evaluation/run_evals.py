@@ -65,15 +65,14 @@ class Evaluator:
         assert LLAMA_RESPONSE in self.df2.columns
         # create another df with the same GENERAL_PROMPT column from DF1 and DF2
         assert self.df1[GENERAL_PROMPT].equals(self.df2[GENERAL_PROMPT])
-        # combined df (evaluation_df) doesn't need question or resolution criteria columns
         self.evaluation_df = pd.DataFrame(
             {
                 GENERAL_PROMPT: self.df1[GENERAL_PROMPT],
                 llm_responses_col1: self.df1[llm_responses_col1],
                 LLAMA_RESPONSE: self.df2[LLAMA_RESPONSE],
+                IS_SHUFFLED: np.random.rand(10) < 0.5,
             }
         )
-        self.evaluation_df[IS_SHUFFLED] = np.random.rand(10) < 0.5
         self.llm_responses_col1 = llm_responses_col1
         self.llm_responses_col2 = LLAMA_RESPONSE
         self.comparison_prompt_template = COMPARISON_PROMPT_TEMPLATE
@@ -145,6 +144,7 @@ async def main():
         llm_responses_col1=GPT35_RESPONSE,
     )
     evaluator.populate_df_comparison_prompts()
+    print(evaluator.evaluation_df.columns)
     # await evaluator.get_all_gpt4_comparison_responses()
 
 
