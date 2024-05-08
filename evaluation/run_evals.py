@@ -29,8 +29,9 @@ Only evaluate them based on the sources, data, and factors they used as well as 
 Begin your evaluation by comparing the two reasonings and provide a short
 explanation. Avoid any position biases and ensure that the order in which
 the reasonings were presented does not influence your decision. Do not allow
-the length of the reasonings to influence your evaluation. Be as objective as
-possible. After providing your explanation, output your final verdict by
+the length of the reasonings or the numbering of the bullet points
+to influence your evaluation. Be as objective as possible.
+After providing your explanation, output your final verdict by
 strictly following this format: "[[A]]" if reasoning A is better, "[[B]]" if
 reasoning B is better, and "[[C]]" for a tie."""
 COMPARISON_PROMPT_BODY = COMPARISON_PROMPT_BODY.replace("\n", " ")
