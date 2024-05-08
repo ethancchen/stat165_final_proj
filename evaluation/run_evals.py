@@ -113,9 +113,7 @@ class Evaluator:
         assert GPT4_COMPARISON_RESPONSE not in self.evaluation_df.columns
         assert COMPARISON_PROMPT in self.evaluation_df.columns
 
-        tasks = [
-            self.prompt_gpt4_once(row[COMPARISON_PROMPT], row[IS_SHUFFLED]) for _, row in self.evaluation_df.iterrows()
-        ]
+        tasks = [self.prompt_gpt4_once(row[COMPARISON_PROMPT]) for _, row in self.evaluation_df.iterrows()]
         gpt4_comparison_responses = await asyncio.gather(*tasks)
 
         self.evaluation_df[GPT4_COMPARISON_RESPONSE] = gpt4_comparison_responses
