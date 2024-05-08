@@ -15,13 +15,15 @@ from utils.helpers import get_openai_api_key  # noqa: E402
 QUERY = "query"
 GENERAL_PROMPT = "general_prompt"
 COMPARISON_PROMPT = "comparison_prompt"
-GPT35_RESPONSE = "gpt35_response"  # is already in LLM_DATA_PATH1
+# GPT35_RESPONSE = "gpt35_response"  # is already in LLM_DATA_PATH1
 IS_SHUFFLED = "is_shuffled"
 GPT4_COMPARISON_RESPONSE = "gpt4_comparison_response"  # to be used in the evaluation ONLY
 INPUT_DIR = Path(__file__).resolve().parents[1] / "inference" / "output"
 # OUTPUT_DIR = Path(__file__).resolve().parent / "output"
-RESULT_DIR = Path(__file__).resolve().parent / "results"
-LLM_DATA_PATH1 = INPUT_DIR / "GPT-3.5_sampled_test_set_responses.csv"
+# GPT35_RESULT_DIR = Path(__file__).resolve().parent / "gpt35_comparison_results"
+LLAMA_BASE_DIR = Path(__file__).resolve().parent / "llama_baseline"
+LLAMA_RESULT_DIR = Path(__file__).resolve().parent / "llama_base_comparison_results"
+# LLM_DATA_PATH1 = INPUT_DIR / "GPT-3.5_sampled_test_set_responses.csv"
 # LLM_DATA_PATH2 = INPUT_DIR / "sample_llama_3_8b_instruct_responses.csv"
 LLAMA_RESPONSE = "llama_response"
 COMPARISON_PROMPT_BODY = """Please act as an impartial judge and evaluate the quality of the forecast reasonings
@@ -61,7 +63,7 @@ class Evaluator:
         self.df2 = pd.read_csv(llm_data_path2)
         # assert len(self.df1) == 100, f"({llm_data_path1.name}) must have 100 rows of forecasting data"
         assert len(self.df2) == 10, f"({llm_data_path2.name}) must have 100 rows of forecasting data"
-        assert llm_responses_col1 == GPT35_RESPONSE and llm_responses_col1 in self.df1.columns
+        assert llm_responses_col1 == LLAMA_RESPONSE and llm_responses_col1 in self.df1.columns
         assert LLAMA_RESPONSE in self.df2.columns
         # create another df with the same GENERAL_PROMPT column from DF1 and DF2
         assert self.df1[GENERAL_PROMPT].equals(self.df2[GENERAL_PROMPT])
@@ -117,7 +119,7 @@ class Evaluator:
         gpt4_comparison_responses = await asyncio.gather(*tasks)
 
         self.evaluation_df[GPT4_COMPARISON_RESPONSE] = gpt4_comparison_responses
-        output_filepath = RESULT_DIR / f"{self.llm_data_path2.name}_GPT4_comparison_evaluations.csv"
+        output_filepath = LLAMA_RESULT_DIR / f"{self.llm_data_path2.stem}_LlaMA_base_comparison_evaluations.csv"
         self.evaluation_df.to_csv(output_filepath, index=False)
 
 
@@ -127,6 +129,8 @@ def setup_parser() -> None:
 
 
 async def main():
+    # TODO: allow for is_gpt (opposite is is_llama_base)
+    # TODO: allow for parsing a cleaned_output directory
     parser = argparse.ArgumentParser(
         description="Evaluate by comparing 2 LLM responses of forecast reasonings on a test set."
     )
@@ -137,14 +141,17 @@ async def main():
     )
     args = parser.parse_args()
     llm_data_path2 = Path(args.llm_data_path2).resolve()
-    RESULT_DIR.mkdir(exist_ok=True)
+    # RESULT_DIR.mkdir(exist_ok=True)
+    LLAMA_RESULT_DIR.mkdir(exist_ok=True)
+    llm_data_path1 = LLAMA_BASE_DIR / ("llama2_base.csv" if "llama2" in llm_data_path2.stem else "llama3_base.csv")
     evaluator = Evaluator(
-        llm_data_path1=LLM_DATA_PATH1,
+        llm_data_path1=llm_data_path1,
         llm_data_path2=llm_data_path2,
-        llm_responses_col1=GPT35_RESPONSE,
+        llm_responses_col1=LLAMA_RESPONSE,
     )
     evaluator.populate_df_comparison_prompts()
-    await evaluator.get_all_gpt4_comparison_responses()
+    print(llm_data_path1)
+    # await evaluator.get_all_gpt4_comparison_responses()
 
 
 if __name__ == "__main__":
