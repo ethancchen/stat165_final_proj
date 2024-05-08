@@ -80,7 +80,7 @@ class Evaluator:
 
     def format_comparison_prompt(self, general_prompt: str, reasoning1: str, reasoning2: str, is_shuffled: bool) -> str:
         assert len(reasoning1) > 0, "Please provide a non-empty string for the first LLM response."
-        assert len(reasoning2) > 0, "Please provide a non-empty string for the second LLM response."
+        # assert len(reasoning2) > 0, "Please provide a non-empty string for the second LLM response."  # sometimes LlaMA gave empty responses  # noqa: E501
         reasoningA = reasoning2 if is_shuffled else reasoning1
         reasoningB = reasoning1 if is_shuffled else reasoning2
         return self.comparison_prompt_template.format(
@@ -113,7 +113,9 @@ class Evaluator:
         assert GPT4_COMPARISON_RESPONSE not in self.evaluation_df.columns
         assert COMPARISON_PROMPT in self.evaluation_df.columns
 
-        tasks = [self.prompt_gpt4_once(row[COMPARISON_PROMPT], row[IS_SHUFFLED]) for _, row in self.df.iterrows()]
+        tasks = [
+            self.prompt_gpt4_once(row[COMPARISON_PROMPT], row[IS_SHUFFLED]) for _, row in self.evaluation_df.iterrows()
+        ]
         gpt4_comparison_responses = await asyncio.gather(*tasks)
 
         self.evaluation_df[GPT4_COMPARISON_RESPONSE] = gpt4_comparison_responses
@@ -144,8 +146,7 @@ async def main():
         llm_responses_col1=GPT35_RESPONSE,
     )
     evaluator.populate_df_comparison_prompts()
-    print(evaluator.evaluation_df.columns)
-    # await evaluator.get_all_gpt4_comparison_responses()
+    await evaluator.get_all_gpt4_comparison_responses()
 
 
 if __name__ == "__main__":
