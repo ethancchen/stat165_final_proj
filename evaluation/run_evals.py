@@ -81,7 +81,7 @@ class Evaluator:
         self.client = AsyncOpenAI(api_key=get_openai_api_key())
 
     def format_comparison_prompt(self, general_prompt: str, reasoning1: str, reasoning2: str, is_shuffled: bool) -> str:
-        assert len(reasoning1) > 0, "Please provide a non-empty string for the first LLM response."
+        # assert len(reasoning1) > 0, "Please provide a non-empty string for the first LLM response."
         # assert len(reasoning2) > 0, "Please provide a non-empty string for the second LLM response."  # sometimes LlaMA gave empty responses  # noqa: E501
         reasoningA = reasoning2 if is_shuffled else reasoning1
         reasoningB = reasoning1 if is_shuffled else reasoning2
@@ -150,8 +150,7 @@ async def main():
         llm_responses_col1=LLAMA_RESPONSE,
     )
     evaluator.populate_df_comparison_prompts()
-    print(llm_data_path1)
-    # await evaluator.get_all_gpt4_comparison_responses()
+    await evaluator.get_all_gpt4_comparison_responses()
 
 
 if __name__ == "__main__":
