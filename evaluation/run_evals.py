@@ -117,7 +117,7 @@ class Evaluator:
         gpt4_comparison_responses = await asyncio.gather(*tasks)
 
         self.evaluation_df[GPT4_COMPARISON_RESPONSE] = gpt4_comparison_responses
-        output_filepath = RESULT_DIR / f"{self.llm_data_path1.name}_GPT4_comparison_evaluations.csv"
+        output_filepath = RESULT_DIR / f"{self.llm_data_path2.name}_GPT4_comparison_evaluations.csv"
         self.evaluation_df.to_csv(output_filepath, index=False)
 
 
