@@ -2,6 +2,8 @@ from pathlib import Path
 
 import pandas as pd
 from torch.utils.data import Dataset
+from datasets import Dataset as HF_Dataset
+
 
 # df column names
 QUESTION = "question"
@@ -25,12 +27,9 @@ class ForecastingRLHF(Dataset):
         """Returns the dataset with each general prompt, chosen responses, and rejected responses."""
         for column in [GENERAL_PROMPT, CHOSEN_RESPONSE, REJECTED_RESPONSE]:
             assert self.df[column].apply(lambda x: isinstance(x, str) and len(x) > 0).all()
-        dataset = self.df.apply(
-            lambda row: {
-                "prompt": row[GENERAL_PROMPT],
-                "chosen": row[CHOSEN_RESPONSE],
-                "rejected": row[REJECTED_RESPONSE],
-            },
-            axis=1,
-        ).tolist()
-        return dataset
+        dataset = {
+            "prompt": self.df[GENERAL_PROMPT].tolist(),
+            "chosen": self.df[CHOSEN_RESPONSE].tolist(),
+            "rejected": self.df[REJECTED_RESPONSE].tolist()
+        }
+        return HF_Dataset.from_dict(dataset)
