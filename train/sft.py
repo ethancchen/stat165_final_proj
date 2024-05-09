@@ -1,18 +1,3 @@
-# Written by Yukang Chen
-# Some code based on https://github.com/epfml/landmark-attention
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import copy
 import io
 import json
@@ -70,13 +55,12 @@ class ModelArguments:
 
 @dataclass
 class DataArguments:
-    data_path: str = field(default="../data_prep/sft_data.csv", metadata={"help": "Path to the training data."})
-    actions_path: str = field(default="../actions.json")
+    data_path: str = field(default="", metadata={"help": "Path to the training data."})
 
 
 @dataclass
 class TrainingArguments(transformers.TrainingArguments):
-    cache_dir: Optional[str] = field(default=None)
+    cache_dir: Optional[str] = field(default='')
     optim: str = field(default="adamw_torch")
     model_max_length: int = field(
         default=8192 * 4,
@@ -166,30 +150,23 @@ def preprocess(
 class SupervisedDataset(Dataset):
     """Dataset for supervised fine-tuning."""
 
-    def __init__(self, data_path: str, actions_path: str, tokenizer: transformers.PreTrainedTokenizer):
+    def __init__(self, data_path: str, tokenizer: transformers.PreTrainedTokenizer):
         super(SupervisedDataset, self).__init__()
         logging.warning("Loading data...")
 
         self.df = pd.read_csv(data_path)
 
-        with open(actions_path, "r") as f:
-            self.actions = json.load(f)
-
         self.prompt_template = (
-            "Below is an instruction that describes a task. "
-            + "Write a response that appropriately completes the request.\n\n"
-            + "### Instruction:\n{instruction}\n\n### Response:"
+            "[INST] <<SYS>>\n"
+            "You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe.  Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\n\n"
+            "If a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don't know the answer to a question, please don't share false information.\n"
+            "<</SYS>> \n\n {instruction} [/INST]"
         )
 
         logging.warning("Formatting inputs...")
-        data = []
-        for i in range(len(self.df)):
-            story_prompt, initial_paragraph, chosen, _ = self.df.iloc[i]
-            data.append((story_prompt, initial_paragraph, chosen))
+        sources = [self.prompt_template.format(instruction=self.df['general_prompt'][i]) for i in range(len(self.df))]
 
-        sources = [self.format_prompt(story_prompt, init_paragraph) for story_prompt, init_paragraph, _ in data]
-
-        targets = [f"{chosen}{tokenizer.eos_token}" for _, _, chosen in data]
+        targets = [f"{chosen}{tokenizer.eos_token}" for chosen in self.df['chosen_response']]
 
         logging.warning("Tokenizing inputs... This may take some time...")
         data_dict = preprocess(sources, targets, tokenizer)
@@ -202,11 +179,6 @@ class SupervisedDataset(Dataset):
 
     def __getitem__(self, i) -> Dict[str, torch.Tensor]:
         return dict(input_ids=self.input_ids[i], labels=self.labels[i])
-
-    def format_prompt(self, story_prompt, init_paragraph):
-        instruction = f"""Here is a story prompt: {story_prompt}\n\nHere is the first paragraph of the story:{init_paragraph}.\n\n Here is a set of actions: {self.actions}.\n\nBased on the initial paragraph, choose the best action for the next paragraph. Only output the action you chose without any quotation marks."""
-        return self.prompt_template.format(instruction=instruction)
-
 
 @dataclass
 class DataCollatorForSupervisedDataset(object):
@@ -230,7 +202,7 @@ class DataCollatorForSupervisedDataset(object):
 def make_supervised_data_module(tokenizer: transformers.PreTrainedTokenizer, data_args) -> Dict:
     """Make dataset and collator for supervised fine-tuning."""
     train_dataset = SupervisedDataset(
-        tokenizer=tokenizer, data_path=data_args.data_path, actions_path=data_args.actions_path
+        tokenizer=tokenizer, data_path=data_args.data_path
     )
     data_collator = DataCollatorForSupervisedDataset(tokenizer=tokenizer)
     return dict(train_dataset=train_dataset, eval_dataset=None, data_collator=data_collator)
@@ -241,7 +213,7 @@ def train():
     model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
     run = wandb.init(
-        project=f"swag-sft-{model_args.model_name_or_path}-{os.getenv('TRAINING_ID')}",
+        project=f"forecast-sft-{os.getenv('TRAINING_ID')}",
         config={"learning_rate": training_args.learning_rate, "steps": training_args.max_steps, "entity": "svgpt"},
     )
 
