@@ -9,3 +9,5 @@ wandb
 datasets  # for the HuggingFace forecasting dataset from Prof's recent paper
 openai
 spaces  # inference
+plotly  # plots in paper
+kaleido # for saving images
